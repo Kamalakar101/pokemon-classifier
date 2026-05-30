@@ -14,7 +14,7 @@ warnings.filterwarnings("ignore", message="Palette images with Transparency expr
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(device)
 
-transform = transforms.Compose([transforms.Resize((128, 128)), transforms.ToTensor()])
+transform = transforms.Compose([transforms.Lambda(lambda img: img.convert("RGB")), transforms.Resize((128, 128)), transforms.ToTensor()])
 
 # Load datasets
 train_data = datasets.ImageFolder("dataset/train", transform=transform)
@@ -30,9 +30,11 @@ model = models.resnet18(weights=ResNet18_Weights.DEFAULT)
 num_classes = len(train_data.classes)
 model.fc = nn.Linear(model.fc.in_features, num_classes)
 
+
+# Load Weights
 load = input("Load Weights from model.pth? (Y/N) ")
 if load.upper() == "Y":
-    model.load_state_dict(torch.load("model.pth"))
+    model.load_state_dict(torch.load("model.pth"), map_location=device)
 
 model = model.to(device)
 
