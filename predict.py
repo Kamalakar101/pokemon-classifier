@@ -33,9 +33,15 @@ image = image.unsqueeze(0)
 # Prediction
 with torch.no_grad():
     outputs = model(image.to(device))
-    _, predicted = torch.max(outputs, 1)
+    probs = torch.softmax(outputs, dim=1)
+    top5_prob, top5_idx = torch.topk(probs, 5)
 
 classes = train_data.classes
 
-pokemon_name = classes[predicted.item()]
-print(f"Prediction: {pokemon_name}")
+print("\nTop 5 Predictions:\n")
+
+for i in range(5):
+    idx = top5_idx[0][i].item()
+    prob = top5_prob[0][i].item() * 100
+
+    print(f"{classes[idx]}: {prob:.2f}%")
