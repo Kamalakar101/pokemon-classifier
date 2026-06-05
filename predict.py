@@ -7,10 +7,12 @@ from PIL import Image
 import warnings
 warnings.filterwarnings("ignore", message="Palette images with Transparency expressed in bytes should be converted to RGBA images")
 
+image_size = 224
+
 # Use GPU if possible
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-transform = transforms.Compose([transforms.Lambda(lambda img: img.convert("RGB")), transforms.Resize((128, 128)), transforms.ToTensor()])
+transform = transforms.Compose([transforms.Lambda(lambda img: img.convert("RGB")), transforms.Resize((image_size, image_size)), transforms.ToTensor()])
 train_data = datasets.ImageFolder("dataset/train")
 
 # Model Definition

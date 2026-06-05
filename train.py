@@ -10,15 +10,19 @@ from torch.utils.data import DataLoader
 import warnings
 warnings.filterwarnings("ignore", message="Palette images with Transparency expressed in bytes should be converted to RGBA images")
 
+image_size = 224
+
 # Use GPU if possible
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(device)
 
-transform = transforms.Compose([transforms.Lambda(lambda img: img.convert("RGB")), transforms.Resize((128, 128)), transforms.ToTensor()])
+train_transform = transforms.Compose([transforms.Lambda(lambda img: img.convert("RGB")), transforms.Resize((image_size, image_size)), transforms.ToTensor()])
+
+test_transform = transforms.Compose([transforms.Lambda(lambda img: img.convert("RGB")), transforms.Resize((image_size, image_size)), transforms.ToTensor()])
 
 # Load datasets
-train_data = datasets.ImageFolder("dataset/train", transform=transform)
-test_data = datasets.ImageFolder("dataset/test", transform=transform)
+train_data = datasets.ImageFolder("dataset/train", transform=train_transform)
+test_data = datasets.ImageFolder("dataset/test", transform=test_transform)
 
 # DataLoaders
 train_loader = DataLoader(train_data, batch_size=32, shuffle=True)
@@ -34,7 +38,7 @@ model.fc = nn.Linear(model.fc.in_features, num_classes)
 # Load Weights
 load = input("Load Weights from model.pth? (Y/N) ")
 if load.upper() == "Y":
-    model.load_state_dict(torch.load("model.pth"), map_location=device)
+    model.load_state_dict(torch.load("model.pth"))
 
 model = model.to(device)
 
