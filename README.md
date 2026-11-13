@@ -2,7 +2,7 @@
 
 ## Overview
 
-A Pokémon image classification application built with PyTorch and ResNet18. The model is trained to recognize all 151 Generation 1 Pokémon from images. Users can upload an image through a Streamlit interface or make predictions through the command line.
+A Pokémon image classification application built with PyTorch and ResNet18. The model is trained to recognize all 151 Generation 1 Pokémon from images. Users can upload an image through a Streamlit interface.
 
 The project uses the [Pokémon Generation One dataset](https://www.kaggle.com/datasets/thedagger/pokemon-generation-one) from Kaggle.
 
